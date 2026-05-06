@@ -34,7 +34,7 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s  %(message)s")
 
 REPORTS_DIR = Path("reports")
 REPORTS_DIR.mkdir(exist_ok=True)
-MODELS_DIR  = Path("models")
+MODELS_DIR = Path("models")
 
 
 def load_pipeline(model_name: str = "best_model"):
@@ -59,7 +59,7 @@ def get_shap_values(pipeline, X_raw: pd.DataFrame):
     X_transformed: pd.DataFrame with feature names (for readable plots)
     """
     preprocessor = pipeline.named_steps["preprocessor"]
-    classifier   = pipeline.named_steps["classifier"]
+    classifier = pipeline.named_steps["classifier"]
 
     # Transform to numpy, then wrap back with feature names for readable plots
     X_np = preprocessor.transform(X_raw)
@@ -73,8 +73,11 @@ def get_shap_values(pipeline, X_raw: pd.DataFrame):
     shap_values = explainer.shap_values(X_transformed)
 
     # Random forests return one array per class — take class 1 (default)
+    # Random forests: older shap returns list per class, newer returns 3D array
     if isinstance(shap_values, list):
         shap_values = shap_values[1]
+    elif shap_values.ndim == 3:
+        shap_values = shap_values[:, :, 1]  # take class 1 (default)
 
     return explainer, shap_values, X_transformed
 
@@ -85,7 +88,8 @@ def plot_global_importance(shap_values, X_transformed: pd.DataFrame, top_n: int 
 
     plt.figure(figsize=(10, 6))
     shap.summary_plot(
-        shap_values, X_transformed,
+        shap_values,
+        X_transformed,
         plot_type="bar",
         max_display=top_n,
         show=False,
@@ -108,7 +112,8 @@ def plot_beeswarm(shap_values, X_transformed: pd.DataFrame, top_n: int = 15):
 
     plt.figure(figsize=(10, 7))
     shap.summary_plot(
-        shap_values, X_transformed,
+        shap_values,
+        X_transformed,
         max_display=top_n,
         show=False,
     )
@@ -135,10 +140,14 @@ def plot_waterfall(
     """
     logger.info("Plotting waterfall for sample index %d...", sample_idx)
 
-    ev = expected_value if expected_value is not None else (
-        explainer.expected_value[1]
-        if isinstance(explainer.expected_value, (list, np.ndarray))
-        else explainer.expected_value
+    ev = (
+        expected_value
+        if expected_value is not None
+        else (
+            explainer.expected_value[1]
+            if hasattr(explainer.expected_value, "__len__")
+            else explainer.expected_value
+        )
     )
 
     explanation = shap.Explanation(
@@ -179,8 +188,8 @@ def run_explainability() -> None:
 
     # Print top 5 most important features
     mean_abs_shap = np.abs(shap_values).mean(axis=0)
-    top_features  = pd.Series(mean_abs_shap, index=X_transformed.columns)
-    top_features  = top_features.sort_values(ascending=False).head(5)
+    top_features = pd.Series(mean_abs_shap, index=X_transformed.columns)
+    top_features = top_features.sort_values(ascending=False).head(5)
 
     print("\n── Top 5 features by mean |SHAP| ──────────────────────────")
     for feat, val in top_features.items():
