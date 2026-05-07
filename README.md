@@ -47,24 +47,29 @@ CreditIQ takes applicant financial data and:
 Raw Data (German Credit / Home Credit)
 │
 ▼
+
 Phase 1 — Data Pipeline
 loader.py · validator.py · preprocessor.py · splitter.py
 │
 ▼
+
 Phase 2 — Modelling (MLflow tracked)
 Logistic Regression · Random Forest · XGBoost · LightGBM
 Metrics: ROC-AUC · KS Statistic · Gini · PR-AUC · Brier Score
 │
 ▼
+
 Phase 3 — Explainability
 SHAP TreeExplainer · Global importance · Per-applicant waterfall
 │
 ▼
+
 Phase 4 — MLOps
 MLflow experiment registry · DVC data versioning
 Evidently AI — data drift + model performance monitoring
 │
 ▼
+
 Phase 5 — Serving
 FastAPI REST API · Streamlit dashboard
 
