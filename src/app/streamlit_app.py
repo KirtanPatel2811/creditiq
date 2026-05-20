@@ -3,11 +3,10 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-
-from src.app.setup import ensure_model_exists
-
-ensure_model_exists()
+ROOT = Path(__file__).resolve().parents[2]
+for p in [str(ROOT), str(ROOT / "src")]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
 """
 src/app/streamlit_app.py
