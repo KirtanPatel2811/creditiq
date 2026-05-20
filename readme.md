@@ -1,3 +1,4 @@
+
 # CreditIQ — End-to-End Credit Risk Scoring System
 
 > Production-grade ML pipeline for credit default prediction with explainability, experiment tracking, drift monitoring, and REST API deployment.
@@ -13,7 +14,6 @@
 ## What this project does
 
 CreditIQ takes applicant financial data and:
-
 1. Predicts probability of loan default (binary classification)
 2. Explains **why** using SHAP values — which features drove the decision
 3. Tracks every experiment with MLflow
@@ -25,15 +25,14 @@ CreditIQ takes applicant financial data and:
 
 ## Results
 
-| Model               | ROC-AUC | KS Statistic | Gini   | PR-AUC |
-| ------------------- | ------- | ------------ | ------ | ------ |
-| Random Forest ✅    | 0.7740  | 0.4571       | 0.5479 | 0.5818 |
-| LightGBM            | 0.7354  | 0.4159       | 0.4709 | 0.5141 |
-| XGBoost             | 0.7352  | 0.4635       | 0.4705 | 0.5313 |
-| Logistic Regression | 0.7321  | 0.3714       | 0.4641 | 0.5170 |
+| Model | ROC-AUC | KS Statistic | Gini | PR-AUC |
+|---|---|---|---|---|
+| Random Forest ✅ | 0.7740 | 0.4571 | 0.5479 | 0.5818 |
+| LightGBM | 0.7354 | 0.4159 | 0.4709 | 0.5141 |
+| XGBoost | 0.7352 | 0.4635 | 0.4705 | 0.5313 |
+| Logistic Regression | 0.7321 | 0.3714 | 0.4641 | 0.5170 |
 
 **Top predictive features (SHAP):**
-
 1. `checking_status` — 0.1263
 2. `duration` — 0.0512
 3. `purpose` — 0.0352
@@ -74,16 +73,16 @@ Phase 5 — Serving
 
 ## Tech Stack
 
-| Layer               | Technology                      |
-| ------------------- | ------------------------------- |
-| Models              | XGBoost, LightGBM, scikit-learn |
-| Experiment tracking | MLflow                          |
-| Data versioning     | DVC                             |
-| Explainability      | SHAP                            |
-| Monitoring          | Evidently AI                    |
-| API                 | FastAPI + Uvicorn               |
-| Dashboard           | Streamlit                       |
-| Tuning              | Optuna                          |
+| Layer | Technology |
+|---|---|
+| Models | XGBoost, LightGBM, scikit-learn |
+| Experiment tracking | MLflow |
+| Data versioning | DVC |
+| Explainability | SHAP |
+| Monitoring | Evidently AI |
+| API | FastAPI + Uvicorn |
+| Dashboard | Streamlit |
+| Tuning | Optuna |
 
 ---
 
@@ -170,5 +169,5 @@ The serialised artifact contains both the preprocessor and the model. At inferen
 
 ## Repository
 
-Built by Kittu — B.Tech CSE, CSPIT CHARUSAT  
+Built by Kirtan Santoki — B.Tech CSE, CSPIT CHARUSAT  
 Portfolio project demonstrating: tabular ML · MLOps · explainable AI · API deployment

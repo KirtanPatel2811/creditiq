@@ -39,9 +39,18 @@ def test_feature_names_match_columns(sample_data):
 def test_unseen_categories_handled(sample_data):
     prep, _, _ = build_preprocessor(sample_data)
     prep.fit(sample_data)
-    # Inject an unseen category — should not raise
     X_new = sample_data.head(5).copy()
-    cat_col = sample_data.select_dtypes(include="object").columns[0]
-    X_new[cat_col] = "UNSEEN_CATEGORY_XYZ"
+
+    # OpenML returns categories as pandas 'category' dtype, not 'object'
+    cat_cols = sample_data.select_dtypes(include=["object", "category"]).columns
+
+    if len(cat_cols) == 0:
+        pytest.skip("No categorical columns found in sample data")
+
+    cat_col = cat_cols[0]
+    X_new = X_new.copy()
+    X_new[cat_col] = X_new[cat_col].astype(str)
+    X_new.iloc[0, X_new.columns.get_loc(cat_col)] = "UNSEEN_CATEGORY_XYZ"
+
     result = prep.transform(X_new)
     assert not np.isnan(result).any()
