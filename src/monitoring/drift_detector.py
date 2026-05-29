@@ -66,9 +66,10 @@ def simulate_drift(X: pd.DataFrame, drift_strength: float = 0.3) -> pd.DataFrame
 
     for col in numeric_cols:
         std = X_drift[col].std()
-        X_drift.iloc[drift_idx, X_drift.columns.get_loc(col)] += rng.normal(
-            loc=std * 1.5, scale=std * 0.5, size=n_drift
-        )
+        noise = rng.normal(loc=std * 1.5, scale=std * 0.5, size=n_drift)
+        X_drift[col] = X_drift[col].astype(float)   # ← cast first
+        X_drift.iloc[drift_idx, X_drift.columns.get_loc(col)] += noise
+
 
     logger.info(
         "Simulated drift on %d/%d rows across %d numeric features",

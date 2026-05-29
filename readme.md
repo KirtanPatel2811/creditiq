@@ -8,6 +8,7 @@
 ![SHAP](https://img.shields.io/badge/Explainability-SHAP-green)
 ![FastAPI](https://img.shields.io/badge/API-FastAPI-teal)
 ![Evidently](https://img.shields.io/badge/Monitoring-Evidently_AI-purple)
+![CI](https://github.com/KirtanPatel2811/creditiq/actions/workflows/ci.yml/badge.svg)
 
 ---
 
@@ -169,5 +170,5 @@ The serialised artifact contains both the preprocessor and the model. At inferen
 
 ## Repository
 
-Built by Kirtan Santoki — B.Tech CSE, CSPIT CHARUSAT  
+Built by Kirtan Santoki — B.Tech CSE, CSPIT CHARUSAT
 Portfolio project demonstrating: tabular ML · MLOps · explainable AI · API deployment

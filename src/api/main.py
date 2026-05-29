@@ -12,17 +12,15 @@ Endpoints:
 
 from __future__ import annotations
 
-import json
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 import joblib
-import numpy as np
 import pandas as pd
 import shap
 from fastapi import FastAPI, HTTPException
-from contextlib import asynccontextmanager
 
-from src.api.schemas import ApplicantFeatures, PredictionResponse, ExplainResponse
+from src.api.schemas import ApplicantFeatures, ExplainResponse, PredictionResponse
 
 app = FastAPI(
     title="CreditIQ API",
@@ -37,20 +35,15 @@ pipeline = None
 explainer = None
 
 
-from contextlib import asynccontextmanager
-
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Load model on startup, clean up on shutdown."""
     global pipeline, explainer
     model_path = MODELS_DIR / "best_model.pkl"
     if not model_path.exists():
-        raise RuntimeError("best_model.pkl not found. Run train.py first.")
+        raise RuntimeError("Run train.py first.")
     pipeline = joblib.load(model_path)
     explainer = shap.TreeExplainer(pipeline.named_steps["classifier"])
     yield
-    # cleanup on shutdown (nothing needed here)
 
 
 app = FastAPI(
